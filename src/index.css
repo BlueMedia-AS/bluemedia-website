@@ -1,0 +1,49 @@
+@import "tailwindcss";
+@import "./design-tokens/colors.css";
+@import "./design-tokens/typography.css";
+@import "./design-tokens/glass.css";
+@import "./design-tokens/spacing.css";
+@import "./design-tokens/animations.css";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
+
+@theme {
+  --color-bg: #F7F6F3;
+  --color-bg-elevated: #FFFFFF;
+  --color-bg-surface: #EDECE9;
+  --color-text-primary: #1A1A1A;
+  --color-text-secondary: #5C5C5C;
+  --color-text-muted: #8A8A86;
+  --color-accent: #2C3E6B;
+  --color-accent-light: #4A6FA5;
+  --color-accent-subtle: #E8EDF4;
+  --color-warm: #C4A882;
+  --color-warm-soft: #D4C4A8;
+  --font-primary: 'Inter Variable', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-primary);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg);
+  line-height: var(--leading-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background-color: var(--color-accent-subtle);
+  color: var(--color-accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent-light);
+  outline-offset: 2px;
+  border-radius: 4px;
+}

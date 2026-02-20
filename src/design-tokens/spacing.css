@@ -1,0 +1,10 @@
+:root {
+  --section-padding-y: clamp(5rem, 10vh, 10rem);
+  --section-padding-x: clamp(1.5rem, 5vw, 4rem);
+  --container-max: 1200px;
+  --container-wide: 1400px;
+  --gap-sm: clamp(0.75rem, 1vw, 1rem);
+  --gap-md: clamp(1.5rem, 2vw, 2rem);
+  --gap-lg: clamp(2.5rem, 4vw, 4rem);
+  --gap-xl: clamp(4rem, 6vw, 6rem);
+}

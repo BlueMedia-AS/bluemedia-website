@@ -1,0 +1,25 @@
+:root {
+  /* Background */
+  --color-bg: #F7F6F3;
+  --color-bg-elevated: #FFFFFF;
+  --color-bg-surface: #EDECE9;
+
+  /* Text */
+  --color-text-primary: #1A1A1A;
+  --color-text-secondary: #5C5C5C;
+  --color-text-muted: #8A8A86;
+
+  /* Accent */
+  --color-accent: #2C3E6B;
+  --color-accent-light: #4A6FA5;
+  --color-accent-subtle: #E8EDF4;
+
+  /* Warm */
+  --color-warm: #C4A882;
+  --color-warm-soft: #D4C4A8;
+
+  /* Blobs */
+  --color-blob-blue: rgba(74, 111, 165, 0.12);
+  --color-blob-cream: rgba(196, 168, 130, 0.10);
+  --color-blob-lavender: rgba(140, 130, 180, 0.10);
+}

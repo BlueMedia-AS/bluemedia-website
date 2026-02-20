@@ -1,0 +1,32 @@
+@keyframes blob-drift-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(80px, -60px) scale(1.05); }
+  50% { transform: translate(-40px, 80px) scale(0.95); }
+  75% { transform: translate(60px, 40px) scale(1.02); }
+}
+
+@keyframes blob-drift-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(-70px, 50px) scale(0.97); }
+  50% { transform: translate(60px, -70px) scale(1.04); }
+  75% { transform: translate(-50px, -30px) scale(1.01); }
+}
+
+@keyframes blob-drift-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(50px, 70px) scale(1.03); }
+  66% { transform: translate(-60px, -40px) scale(0.98); }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

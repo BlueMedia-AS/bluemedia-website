@@ -1,0 +1,7 @@
+export { default as LogoBMAS } from './LogoBMAS'
+export { default as IconStrategy } from './IconStrategy'
+export { default as IconTech } from './IconTech'
+export { default as IconDesign } from './IconDesign'
+export { default as IconData } from './IconData'
+export { default as IconNetwork } from './IconNetwork'
+export { default as IconArrowDown } from './IconArrowDown'
