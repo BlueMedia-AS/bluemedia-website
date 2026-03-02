@@ -3,16 +3,14 @@ import Section from '../components/layout/Section'
 import Container from '../components/layout/Container'
 import Reveal from '../components/animation/Reveal'
 import NodeNetwork from '../components/animation/NodeNetwork'
-import { LogoBMAS } from '../components/icons'
+import { LogoBlueMedia } from '../components/icons'
 import { footer } from '../content/no'
 
 const smoothEase = [0.45, 0, 0.15, 1] as const
 
 const footerLinks = [
   { label: 'Visjon', href: '#visjon' },
-  { label: 'Områder', href: '#omrader' },
-  { label: 'Initiativer', href: '#initiativer' },
-  { label: 'Om BMAS', href: '#om' },
+  { label: 'Om BlueMedia', href: '#om' },
 ]
 
 export default function Footer() {
@@ -39,14 +37,7 @@ export default function Footer() {
           {/* Left — brand */}
           <div className="flex flex-col items-start">
             <Reveal variant="fadeUp">
-              {/* Logo placeholder */}
-              <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl border border-[var(--color-text-muted)]/10 bg-white/30">
-                <span className="font-[var(--font-primary)] text-lg font-bold text-[var(--color-accent)]">B</span>
-              </div>
-            </Reveal>
-
-            <Reveal variant="fadeUp" delay={0.1}>
-              <LogoBMAS size={28} className="mb-4 text-[var(--color-text-primary)]" />
+              <LogoBlueMedia size={28} className="mb-4 text-[var(--color-text-primary)]" />
             </Reveal>
 
             <Reveal variant="fadeUp" delay={0.2}>
@@ -106,7 +97,7 @@ export default function Footer() {
                   className="text-[var(--color-text-secondary)]"
                   style={{ fontSize: 'var(--text-small)' }}
                 >
-                  post@bmas.no
+                  post@bluemedia.no
                 </span>
                 <span
                   className="text-[var(--color-text-secondary)]"

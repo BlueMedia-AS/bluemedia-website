@@ -3,15 +3,15 @@ interface LogoProps {
   size?: number
 }
 
-export default function LogoBMAS({ className = '', size = 40 }: LogoProps) {
+export default function LogoBlueMedia({ className = '', size = 40 }: LogoProps) {
   return (
     <svg
       width={size * 3}
       height={size}
-      viewBox="0 0 120 40"
+      viewBox="0 0 200 40"
       fill="none"
       className={className}
-      aria-label="BMAS"
+      aria-label="BlueMedia"
     >
       <text
         x="0"
@@ -22,7 +22,7 @@ export default function LogoBMAS({ className = '', size = 40 }: LogoProps) {
         letterSpacing="0.08em"
         fill="currentColor"
       >
-        BMAS
+        BlueMedia
       </text>
     </svg>
   )

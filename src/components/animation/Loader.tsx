@@ -5,7 +5,7 @@ interface LoaderProps {
 }
 
 const LINE_COUNT = 5
-const CHAR_SET = 'アイウエオカキクケコ01{}[]<>/\\|BMAS'
+const CHAR_SET = 'アイウエオカキクケコ01{}[]<>/\\|BlueMedia'
 
 function randomLine(len: number) {
   return Array.from({ length: len }, () =>
@@ -113,11 +113,11 @@ export default function Loader({ isLoading }: LoaderProps) {
               Initialiserer
             </motion.span>
 
-            {/* BMAS letters */}
+            {/* BlueMedia letters */}
             <div className="flex items-baseline gap-[0.04em]">
-              {'BMAS'.split('').map((letter, i) => (
+              {'BlueMedia'.split('').map((letter, i) => (
                 <motion.span
-                  key={letter}
+                  key={i}
                   className="inline-block font-[var(--font-primary)] font-bold text-[var(--color-accent)]"
                   style={{ fontSize: 'clamp(3rem, 8vw, 5rem)', lineHeight: 1 }}
                   initial={{

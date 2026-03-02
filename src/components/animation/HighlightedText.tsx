@@ -1,3 +1,4 @@
+import { useId } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 
 /**
@@ -26,13 +27,14 @@ export default function HighlightedText({
 }: HighlightedTextProps) {
   const reduced = useReducedMotion()
   const words = text.split(' ')
+  const id = `highlight-rough${useId()}`
 
   return (
     <>
       {/* SVG filter for organic/rough edges on the highlight */}
       <svg width="0" height="0" className="absolute" aria-hidden="true">
         <defs>
-          <filter id="highlight-rough">
+          <filter id={id}>
             {/* Turbulence creates organic noise */}
             <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" result="noise" />
             {/* Displace the shape edges using the noise */}
@@ -52,7 +54,7 @@ export default function HighlightedText({
                 borderRadius: '3px',
                 margin: '-2px -4px',
                 padding: '2px 4px',
-                filter: 'url(#highlight-rough)',
+                filter: `url(#${id})`,
                 zIndex: 0,
               }}
               initial={{ scaleX: 0, originX: 0 }}

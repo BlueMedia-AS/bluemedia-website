@@ -23,7 +23,12 @@ interface DataPacket {
   opacity: number
 }
 
-const NODE_COUNT = 45
+interface NodeNetworkProps {
+  className?: string
+  /** Ambient mode: fewer balls, no lines/packets, sides only, slower */
+  ambient?: boolean
+}
+
 const CONNECTION_DISTANCE = 180
 const PACKET_CHANCE = 0.003
 const ACCENT = { r: 44, g: 62, b: 107 }   // --color-accent #2C3E6B
@@ -33,7 +38,7 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t
 }
 
-export default function NodeNetwork({ className = '' }: { className?: string }) {
+export default function NodeNetwork({ className = '', ambient = false }: NodeNetworkProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const reduced = useReducedMotion()
 
@@ -50,6 +55,8 @@ export default function NodeNetwork({ className = '' }: { className?: string }) 
     let nodes: Node[] = []
     let packets: DataPacket[] = []
 
+    const nodeCount = ambient ? 20 : 45
+
     function resize() {
       const rect = canvas!.getBoundingClientRect()
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
@@ -62,18 +69,37 @@ export default function NodeNetwork({ className = '' }: { className?: string }) 
 
     function initNodes() {
       nodes = []
-      for (let i = 0; i < NODE_COUNT; i++) {
-        const isHub = i < 5
+      for (let i = 0; i < nodeCount; i++) {
+        const isHub = i < (ambient ? 14 : 5)
+
+        let x: number, y: number
+        if (ambient) {
+          // Place nodes on left or right 35% of the canvas
+          const side = Math.random() < 0.5 ? 'left' : 'right'
+          x = side === 'left'
+            ? Math.random() * w * 0.35
+            : w - Math.random() * w * 0.35
+          y = Math.random() * h
+        } else {
+          x = Math.random() * w
+          y = Math.random() * h
+        }
+
+        const speed = ambient ? 0.12 : 0.3
         nodes.push({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: (Math.random() - 0.5) * 0.3,
-          radius: isHub ? 2.5 + Math.random() * 1.5 : 1 + Math.random() * 1.5,
+          x,
+          y,
+          vx: (Math.random() - 0.5) * speed,
+          vy: (Math.random() - 0.5) * speed,
+          radius: ambient
+            ? (isHub ? 3.5 + Math.random() * 2 : 2 + Math.random() * 2)
+            : (isHub ? 2.5 + Math.random() * 1.5 : 1 + Math.random() * 1.5),
           baseRadius: 0,
           pulsePhase: Math.random() * Math.PI * 2,
-          pulseSpeed: 0.3 + Math.random() * 0.5,
-          opacity: isHub ? 0.5 + Math.random() * 0.3 : 0.15 + Math.random() * 0.25,
+          pulseSpeed: ambient ? 0.15 + Math.random() * 0.2 : 0.3 + Math.random() * 0.5,
+          opacity: ambient
+            ? (isHub ? 0.6 + Math.random() * 0.3 : 0.25 + Math.random() * 0.3)
+            : (isHub ? 0.5 + Math.random() * 0.3 : 0.15 + Math.random() * 0.25),
           type: isHub ? 1 : 0,
         })
         nodes[i].baseRadius = nodes[i].radius
@@ -81,7 +107,6 @@ export default function NodeNetwork({ className = '' }: { className?: string }) 
     }
 
     function spawnPacket() {
-      // Find two connected nodes
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const dx = nodes[i].x - nodes[j].x
@@ -109,63 +134,81 @@ export default function NodeNetwork({ className = '' }: { className?: string }) 
         node.x += node.vx
         node.y += node.vy
 
-        // Soft bounce off edges with padding
-        if (node.x < -20) node.vx = Math.abs(node.vx)
-        if (node.x > w + 20) node.vx = -Math.abs(node.vx)
-        if (node.y < -20) node.vy = Math.abs(node.vy)
-        if (node.y > h + 20) node.vy = -Math.abs(node.vy)
+        if (ambient) {
+          // Keep nodes on the sides — soft bounce within side zones
+          const leftBound = w * 0.4
+          const rightStart = w * 0.6
+          const isLeftSide = node.x < w * 0.5
+
+          if (isLeftSide) {
+            if (node.x < -10) node.vx = Math.abs(node.vx)
+            if (node.x > leftBound) node.vx = -Math.abs(node.vx)
+          } else {
+            if (node.x < rightStart) node.vx = Math.abs(node.vx)
+            if (node.x > w + 10) node.vx = -Math.abs(node.vx)
+          }
+          if (node.y < -10) node.vy = Math.abs(node.vy)
+          if (node.y > h + 10) node.vy = -Math.abs(node.vy)
+        } else {
+          if (node.x < -20) node.vx = Math.abs(node.vx)
+          if (node.x > w + 20) node.vx = -Math.abs(node.vx)
+          if (node.y < -20) node.vy = Math.abs(node.vy)
+          if (node.y > h + 20) node.vy = -Math.abs(node.vy)
+        }
 
         // Gentle pulse
         node.radius = node.baseRadius + Math.sin(time * 0.001 * node.pulseSpeed + node.pulsePhase) * 0.5
       }
 
-      // Draw connections
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const dx = nodes[i].x - nodes[j].x
-          const dy = nodes[i].y - nodes[j].y
-          const dist = Math.sqrt(dx * dx + dy * dy)
-          if (dist < CONNECTION_DISTANCE) {
-            const strength = 1 - dist / CONNECTION_DISTANCE
-            const isAccent = nodes[i].type === 1 || nodes[j].type === 1
-            const c = isAccent ? ACCENT : MUTED
-            ctx!.beginPath()
-            ctx!.moveTo(nodes[i].x, nodes[i].y)
-            ctx!.lineTo(nodes[j].x, nodes[j].y)
-            ctx!.strokeStyle = `rgba(${c.r},${c.g},${c.b},${strength * (isAccent ? 0.18 : 0.08)})`
-            ctx!.lineWidth = isAccent ? 0.8 : 0.5
-            ctx!.stroke()
+      if (!ambient) {
+        // Draw connections (only in normal mode)
+        for (let i = 0; i < nodes.length; i++) {
+          for (let j = i + 1; j < nodes.length; j++) {
+            const dx = nodes[i].x - nodes[j].x
+            const dy = nodes[i].y - nodes[j].y
+            const dist = Math.sqrt(dx * dx + dy * dy)
+            if (dist < CONNECTION_DISTANCE) {
+              const strength = 1 - dist / CONNECTION_DISTANCE
+              const isAccent = nodes[i].type === 1 || nodes[j].type === 1
+              const c = isAccent ? ACCENT : MUTED
+              ctx!.beginPath()
+              ctx!.moveTo(nodes[i].x, nodes[i].y)
+              ctx!.lineTo(nodes[j].x, nodes[j].y)
+              ctx!.strokeStyle = `rgba(${c.r},${c.g},${c.b},${strength * (isAccent ? 0.18 : 0.08)})`
+              ctx!.lineWidth = isAccent ? 0.8 : 0.5
+              ctx!.stroke()
+            }
           }
         }
-      }
 
-      // Draw and update data packets
-      spawnPacket()
-      packets = packets.filter((p) => p.progress <= 1)
-      for (const packet of packets) {
-        packet.progress += packet.speed
-        const from = nodes[packet.fromIdx]
-        const to = nodes[packet.toIdx]
-        const px = lerp(from.x, to.x, packet.progress)
-        const py = lerp(from.y, to.y, packet.progress)
-        const fadeIn = Math.min(packet.progress * 5, 1)
-        const fadeOut = Math.min((1 - packet.progress) * 5, 1)
-        const alpha = packet.opacity * fadeIn * fadeOut
+        // Draw and update data packets
+        spawnPacket()
+        packets = packets.filter((p) => p.progress <= 1)
+        for (const packet of packets) {
+          packet.progress += packet.speed
+          const from = nodes[packet.fromIdx]
+          const to = nodes[packet.toIdx]
+          const px = lerp(from.x, to.x, packet.progress)
+          const py = lerp(from.y, to.y, packet.progress)
+          const fadeIn = Math.min(packet.progress * 5, 1)
+          const fadeOut = Math.min((1 - packet.progress) * 5, 1)
+          const alpha = packet.opacity * fadeIn * fadeOut
 
-        // Glow
-        const grad = ctx!.createRadialGradient(px, py, 0, px, py, 6)
-        grad.addColorStop(0, `rgba(${ACCENT.r},${ACCENT.g},${ACCENT.b},${alpha * 0.5})`)
-        grad.addColorStop(1, `rgba(${ACCENT.r},${ACCENT.g},${ACCENT.b},0)`)
-        ctx!.beginPath()
-        ctx!.arc(px, py, 6, 0, Math.PI * 2)
-        ctx!.fillStyle = grad
-        ctx!.fill()
+          // Glow
+          const grad = ctx!.createRadialGradient(px, py, 0, px, py, 6)
+          grad.addColorStop(0, `rgba(${ACCENT.r},${ACCENT.g},${ACCENT.b},${alpha * 0.5})`)
+          grad.addColorStop(1, `rgba(${ACCENT.r},${ACCENT.g},${ACCENT.b},0)`)
+          ctx!.beginPath()
+          ctx!.arc(px, py, 6, 0, Math.PI * 2)
+          ctx!.fillStyle = grad
+          ctx!.fill()
 
-        // Core dot
-        ctx!.beginPath()
-        ctx!.arc(px, py, 1.5, 0, Math.PI * 2)
-        ctx!.fillStyle = `rgba(${ACCENT.r},${ACCENT.g},${ACCENT.b},${alpha})`
-        ctx!.fill()
+          // Core dot
+          ctx!.beginPath()
+          ctx!.arc(px, py, 1.5, 0, Math.PI * 2)
+          ctx!.fillStyle = `rgba(${ACCENT.r},${ACCENT.g},${ACCENT.b},${alpha})`
+          ctx!.fill()
+        }
       }
 
       // Draw nodes
@@ -197,7 +240,6 @@ export default function NodeNetwork({ className = '' }: { className?: string }) 
     initNodes()
 
     if (reduced) {
-      // Static render — one frame only
       draw(0)
     } else {
       animId = requestAnimationFrame(draw)
@@ -213,7 +255,7 @@ export default function NodeNetwork({ className = '' }: { className?: string }) 
       cancelAnimationFrame(animId)
       ro.disconnect()
     }
-  }, [reduced])
+  }, [reduced, ambient])
 
   return (
     <canvas

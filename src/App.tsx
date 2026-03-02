@@ -1,22 +1,17 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { MotionConfig, useReducedMotion } from 'framer-motion'
+import useSmoothScroll from './hooks/useSmoothScroll'
 import Loader from './components/animation/Loader'
-import AmbientBackground from './components/animation/AmbientBackground'
-import CursorGlow from './components/animation/CursorGlow'
+import GrainOverlay from './components/animation/GrainOverlay'
 import Navbar from './components/layout/Navbar'
-import Divider from './components/ui/Divider'
-import Hero from './sections/Hero'
+import NodeNetwork from './components/animation/NodeNetwork'
 import Manifest from './sections/Manifest'
-import Capabilities from './sections/Capabilities'
-import Initiatives from './sections/Initiatives'
-import About from './sections/About'
 import Footer from './sections/Footer'
-import RollingBall from './components/animation/RollingBall'
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true)
   const reduced = useReducedMotion()
-  const dotAnchorRef = useRef<HTMLSpanElement>(null)
+  useSmoothScroll(!isLoading && !reduced)
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), reduced ? 100 : 3200)
@@ -26,24 +21,21 @@ export default function App() {
   return (
     <MotionConfig reducedMotion="user">
       <Loader isLoading={isLoading} />
-      <AmbientBackground />
-      <CursorGlow />
+      <GrainOverlay isLoaded={!isLoading} />
       {!isLoading && <Navbar />}
-      {!isLoading && <RollingBall anchorRef={dotAnchorRef} />}
 
-      <main>
-        <Hero isLoaded={!isLoading} dotAnchorRef={dotAnchorRef} />
-        <Divider />
-        <Manifest />
-        <Divider />
-        <Capabilities />
-        <Divider />
-        <Initiatives />
-        <Divider />
-        <About />
-      </main>
+      <div className="relative">
+        {/* Ambient floating dots on sides — scrolls with content */}
+        <div className="pointer-events-none absolute inset-0 z-0" aria-hidden="true">
+          <NodeNetwork ambient className="opacity-70" />
+        </div>
 
-      <Footer />
+        <main className="relative z-10">
+          <Manifest />
+        </main>
+
+        <Footer />
+      </div>
     </MotionConfig>
   )
 }
