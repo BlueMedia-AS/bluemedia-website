@@ -34,7 +34,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
     <!-- Theme -->
-    <meta name="theme-color" content="#F7F6F3" />
+    <meta name="theme-color" content="#1435C8" />
     <meta name="color-scheme" content="light" />
 
     <!-- Structured Data (JSON-LD) -->
@@ -57,7 +57,42 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <!--
+      Static fallback for crawlers that don't run JavaScript.
+      Same content as the React sections in src/sections — React replaces it on mount.
+    -->
+    <div id="root">
+      <main style="max-width:48rem;margin:0 auto;padding:4rem 1.5rem;font-family:system-ui,sans-serif;color:#0B1535">
+        <h1>Systemutvikling for bedrift og forbruker</h1>
+        <p>BlueMedia utvikler programvareløsninger og digitale plattformer. Vi jobber med hele verdikjeden, fra teknisk arkitektur og produktdesign til drift, mediekjøp og vekststrategi.</p>
+        <section id="om">
+          <h2>Om BlueMedia</h2>
+          <p>BlueMedia er et norsk teknologiselskap med base i Bergen. Vi utvikler programvare og digitale tjenester for kunder i ulike bransjer, og kombinerer teknisk gjennomføringskraft med kommersiell forståelse.</p>
+        </section>
+        <section id="kunder">
+          <h2>Kunder og prosjekter</h2>
+          <p><a href="https://teorihuset.no/">Teorihuset</a> – digitale øvingsprøver til statsborgerprøven, samfunnskunnskapsprøven, etablererprøven og drosjeprøven.</p>
+          <ul>
+            <li>Appfabrikken</li>
+            <li>Betong Bergen</li>
+            <li>Defendor Security</li>
+            <li>Frøya Cafe</li>
+            <li>Garanti Media</li>
+            <li>Lillestrøm Tannhelse</li>
+            <li>Mediapartneren</li>
+            <li>Milano Pizzeria Sartor</li>
+            <li>NurDent</li>
+            <li>Tip Topp Burger</li>
+            <li>Ure Lodge</li>
+            <li>Vestland Omsorg</li>
+            <li>xConnect Solutions</li>
+          </ul>
+        </section>
+        <footer id="kontakt">
+          <p><a href="mailto:post@bluemedia.no">post@bluemedia.no</a> – Bergen, Norge</p>
+        </footer>
+      </main>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

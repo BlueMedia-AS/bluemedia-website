@@ -1,61 +1,66 @@
 @import "tailwindcss";
-@import "./design-tokens/colors.css";
-@import "./design-tokens/typography.css";
-@import "./design-tokens/glass.css";
-@import "./design-tokens/spacing.css";
-@import "./design-tokens/animations.css";
-@import "@fontsource-variable/inter";
-@import "@fontsource-variable/jetbrains-mono";
+@import "@fontsource-variable/schibsted-grotesk";
 
 @theme {
-  --color-bg: #F7F6F3;
-  --color-bg-elevated: #FFFFFF;
-  --color-bg-surface: #EDECE9;
-  --color-text-primary: #1A1A1A;
-  --color-text-secondary: #5C5C5C;
-  --color-text-muted: #8A8A86;
-  --color-accent: #2C3E6B;
-  --color-accent-light: #4A6FA5;
-  --color-accent-subtle: #E8EDF4;
-  --color-warm: #C4A882;
-  --color-warm-soft: #D4C4A8;
-  --font-primary: 'Inter Variable', 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
-}
-
-html.lenis, html.lenis body {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: hidden;
+  --color-blue: #1435C8;
+  --color-blue-soft: #B9C3EE;
+  --color-ink: #0B1535;
+  --color-mist: #5A6280;
+  --color-rule: #DCE1EC;
+  --color-paper: #FFFFFF;
+  --font-sans: 'Schibsted Grotesk Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 
 body {
-  font-family: var(--font-primary);
-  color: var(--color-text-primary);
-  background-color: var(--color-bg);
-  line-height: var(--leading-normal);
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background-color: var(--color-paper);
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background-color: var(--color-accent-subtle);
-  color: var(--color-accent);
+  background-color: var(--color-blue);
+  color: var(--color-paper);
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-accent-light);
-  outline-offset: 2px;
-  border-radius: 4px;
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* The one moment of motion: hero lines rise out of their own baseline on load */
+.rise-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+
+.rise-line > span {
+  display: block;
+  animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.1, 1) both;
+}
+
+.fade-in {
+  animation: fade 0.9s ease-out 0.5s both;
+}
+
+@keyframes rise {
+  from { transform: translateY(105%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise-line > span,
+  .fade-in {
+    animation: none;
+  }
 }
