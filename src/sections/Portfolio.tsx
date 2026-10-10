@@ -5,7 +5,7 @@ const { featured } = portfolio
 
 export default function Portfolio() {
   return (
-    <SectionRow id="kunder" title={portfolio.clientsTitle}>
+    <SectionRow id="kunder" title={portfolio.clientsTitle} divider={false}>
       {/* Teorihuset — plain <a> without rel, so the link is followed */}
       <div className="flex flex-col gap-8 pb-12 lg:flex-row lg:items-center lg:gap-12">
         <a href={featured.url} className="shrink-0" aria-label={featured.name}>

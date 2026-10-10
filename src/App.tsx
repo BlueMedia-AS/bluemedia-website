@@ -10,8 +10,8 @@ export default function App() {
       <Hero />
       <main>
         <About />
-        <Portfolio />
         <Partner />
+        <Portfolio />
       </main>
       <Footer />
     </>
