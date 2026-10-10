@@ -43,6 +43,14 @@ export const portfolio = {
   ],
 }
 
+export const partner = {
+  title: 'Samarbeid',
+  name: 'Mediapartneren AS',
+  url: 'https://www.mediapartneren.no/',
+  logo: '/mediapartneren-logo.svg',
+  body: 'BlueMedia har et aktivt samarbeid med Mediapartneren AS, der vi bistår med kundeleveranse og rådgivning inn mot deres prosjekter og kunder.',
+}
+
 export const footer = {
   title: 'Ta kontakt',
   body: 'Fortell oss hva du vil bygge.',
